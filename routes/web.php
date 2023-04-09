@@ -18,6 +18,7 @@ use App\Http\Controllers\ProductController;
 Route::get('/login', function () {
     return view('login');
 });
+
 Route::get("logout", function(){
      Session::forget('user');
     return redirect('/login');
