@@ -20,6 +20,7 @@ Route::get('/login', function () {
 });
  
 
+
 Route::get("logout", function(){
      Session::forget('user');
     return redirect('/login');
