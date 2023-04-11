@@ -10,6 +10,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Session;
+use Redirect;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
+
 
 class ProductController extends Controller
 {
@@ -115,15 +119,28 @@ class ProductController extends Controller
    }
    public function register(Request $req)
    {
-        $user= new User;
-        $user->name=$req->name;
-        $user->email=$req->email;
-        $user->password=Hash::make($req->password);
-        $user->save();
-        return redirect('/login');
-        
-
-   }
+    $validator = Validator::make($req->all(), [
+      //'name' => 'required',
+      //'email' => 'required|email|unique:users',
+      //'password' => 'required|min:8|confirmed',
+      'name'=>'required|regex:/^[A-Z]+$/i',
+      'email'=>'required|regex:/^.+@.+$/i|email|unique:users,email',
+      'password'=>['required','string',
+      Password::min(8)->letters()->numbers()->mixedCase()->symbols()->uncompromised(3)
+  ],
+]);
+  
+  if ($validator->fails()) {
+      return view('register')->with('errors', $validator->errors());
+  }
+  
+       $user= new User;
+       $user->name=$req->name;
+       $user->email=$req->email;
+       $user->password=Hash::make($req->password);
+       $user->save();
+       return redirect('/login');
+    }
 }
   
 

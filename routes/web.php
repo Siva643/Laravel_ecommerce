@@ -18,20 +18,16 @@ use App\Http\Controllers\ProductController;
 Route::get('/login', function () {
     return view('login');
 });
- 
-
-
-
-
-
-
 Route::get("logout", function(){
      Session::forget('user');
     return redirect('/login');
 });
+
+//why you have written below line?
+//
 Route::view('/register','register');
 Route::post('/login',[UserController::class,'login']);
-Route::post('/register',[ProductController::class,'register']);
+Route::post('/register',[ProductController::class,'register'])->name('form.register');
 
 Route::get('/',[ProductController::class,'index']);
 Route::get('detail/{id}',[ProductController::class,'detail']);
